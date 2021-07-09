@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { NavLink as RouterLink } from 'react-router-dom'
-import styled from 'styled-components'
+import React, { useState } from "react";
+import { NavLink as RouterLink } from "react-router-dom";
+import styled from "styled-components";
 
-import HeartableLink from '../HeartableLink'
+import HeartableLink from "../HeartableLink";
 
 const ClippingLink = styled(RouterLink)`
   position: relative;
@@ -20,7 +20,7 @@ const ClippingLink = styled(RouterLink)`
   }
   perspective: 24em;
   color: inherit;
-  transition: .5s ease all;
+  transition: 0.5s ease all;
   &:hover {
     z-index: 5;
   }
@@ -29,7 +29,7 @@ const ClippingLink = styled(RouterLink)`
     background: #eee;
     img {
       transform: scale(1.5);
-      transform-delay: .5s;
+      transform-delay: 0.5s;
     }
     .detail {
       transform: scale(1.5);
@@ -42,9 +42,9 @@ const ClippingLink = styled(RouterLink)`
     background-color: #eee;
   }
   img {
-    box-shadow: .5em .5em 1em 0 #0004;
+    box-shadow: 0.5em 0.5em 1em 0 #0004;
     transform: rotate3d(0, 1, 0, 0deg);
-    transition: .5s ease all;
+    transition: 0.5s ease all;
     backface-visibility: hidden;
     max-height: inherit;
     z-index: 3;
@@ -57,7 +57,7 @@ const ClippingLink = styled(RouterLink)`
   }
   .detail {
     position: absolute;
-    padding: .25em;
+    padding: 0.25em;
     top: 0;
     left: 0;
     right: 0;
@@ -66,7 +66,7 @@ const ClippingLink = styled(RouterLink)`
     display: flex;
     /* background: #fff; */
     /* transform: rotate3d(0, 1, 0, 180deg); */
-    transition: .75s ease all;
+    transition: 0.75s ease all;
     backface-visibility: hidden;
     display: flex;
     align-items: center;
@@ -74,12 +74,13 @@ const ClippingLink = styled(RouterLink)`
     .title {
       opacity: 0;
       text-transform: uppercase;
-      transition: .75s ease all;
+      transition: 0.75s ease all;
       span {
         background: #fff;
       }
-      span, mark {
-        padding: .25em;
+      span,
+      mark {
+        padding: 0.25em;
         display: inline;
       }
     }
@@ -91,7 +92,7 @@ const ClippingLink = styled(RouterLink)`
       font-weight: bold;
       color: #fff;
       background: #08f;
-      padding: .25em;
+      padding: 0.25em;
     }
     button {
       position: absolute;
@@ -103,17 +104,17 @@ const ClippingLink = styled(RouterLink)`
     color: inherit;
   }
   img {
-    transition: .75s ease all;
+    transition: 0.75s ease all;
     height: 100%;
-  	width: auto;
-  	max-width: 100%;
+    width: auto;
+    max-width: 100%;
   }
   .cat {
     position: absolute;
     left: 0;
     bottom: 0;
   }
-`
+`;
 
 const IMG = styled.div`
   max-height: 8em;
@@ -125,28 +126,41 @@ const IMG = styled.div`
   img {
     margin: auto;
   }
-`
+`;
 
 function randomNumber(min, max) {
-  const range = max - min
-  const rand = (Math.random() * range) - (range / 2)
-  return rand
+  const range = max - min;
+  const rand = Math.random() * range - range / 2;
+  return rand;
 }
 
 function Link({ size = 0, to, record, children, key, ...props }) {
-  const [randomRotate] = useState(() => randomNumber(-4, 4))
-  const { year } = record
-  return (<ClippingLink key={record.id} to={to} size={size} id={record.id} title={record.title} tabIndex={0} style={{ transform: `scale(.92) rotate(${randomRotate}deg)` }} {...props}>
-    {record.img && <IMG><img src={record.img} alt={record.title} loading="lazy" /></IMG>}
-    <div className="detail">
-      <div className="title">
-        {children || <span>{record.title}</span>}
+  const [randomRotate] = useState(() => randomNumber(-4, 4));
+  // const { year } = record
+  return (
+    <ClippingLink
+      key={record.id}
+      to={to}
+      size={size}
+      id={record.id}
+      title={record.title}
+      tabIndex={0}
+      style={{ transform: `scale(.92) rotate(${randomRotate}deg)` }}
+      {...props}
+    >
+      {record.img && (
+        <IMG>
+          <img src={record.img} alt={record.title} loading="lazy" />
+        </IMG>
+      )}
+      <div className="detail">
+        <div className="title">{children || <span>{record.title}</span>}</div>
+        {record.year > 0 ? <div className="year">{record.year}</div> : null}
+        {<div className="cat">{record.categories.map((cat) => cat.emoji)}</div>}
+        <HeartableLink url={record.id} readonly hideOff />
       </div>
-      {record.year > 0 ? <div className="year">{record.year}</div> : null}
-      {<div className="cat">{record.categories.map(cat => cat.emoji)}</div>}
-      <HeartableLink url={record.id} readonly hideOff />
-    </div>
-  </ClippingLink>)
+    </ClippingLink>
+  );
 }
 
-export default Link
+export default Link;
